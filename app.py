@@ -44,6 +44,7 @@ def add_csrf_form_to_all_pages():
 
     g.csrf_form = CSRFAuthenticationForm()
 
+
 @app.before_request
 def add_user_to_g():
     """If we're logged in, add curr user to Flask global."""
@@ -173,7 +174,7 @@ def show_user(user_id):
         return redirect("/")
 
     user = User.query.get_or_404(user_id)
-    #breakpoint()
+    # breakpoint()
     return render_template('users/show.html', user=user)
 
 
@@ -241,17 +242,19 @@ def stop_following(follow_id):
 def profile():
     """Update profile for current user."""
 
-
     # IMPLEMENT THIS
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-
     form = EditProfileForm(obj=g.user)
 
     if form.validate_on_submit():
-        if User.authenticate(form.username.data,form.password.data):
+        # breakpoint()
+        if g.user.authenticate(
+            username=form.username.data,
+            password=form.password.data
+        ):
 
             g.user.username = form.username.data
             g.user.email = form.email.data
@@ -261,10 +264,12 @@ def profile():
 
             db.session.commit()
 
-            return redirect(f"/users/{g.user}")
+            return redirect(f"/users/{g.user.id}")
+        else:
+            flash("Incorrect password!")
+            render_template("/users/edit.html", form=form)
 
-    return render_template("/users/edit.html",form=form)
-
+    return render_template("/users/edit.html", form=form)
 
 
 @app.post('/users/delete')

@@ -1,4 +1,3 @@
 seed.py won't populate until .env exists
 
 logout route was a get request, updated to form with button and action
-
