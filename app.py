@@ -37,13 +37,13 @@ connect_db(app)
 # User signup/login/logout
 
 
-# @app.before_request
-# def add_csrf_form_to_all_pages():
-    # """Before every route, add CSRF-only form to global object."""
+@app.before_request
+def add_csrf_form_to_all_pages():
+    """Before every route, add CSRF-only form to global object."""
 
-    # g.csrf_form = CSRFAuthenticationForm()
+    g.csrf_form = CSRFAuthenticationForm()
 
-@app.after_request
+@app.before_request
 def add_user_to_g():
     """If we're logged in, add curr user to Flask global."""
     if CURR_USER_KEY in session:
@@ -130,14 +130,13 @@ def logout():
     """Handle logout of user and redirect to homepage."""
 
     if g.csrf_form.validate_on_submit():
-        session.pop(CURR_USER_KEY)
-        return redirect("/")
+        do_logout()
+        flash("Logout successful")
+        return redirect('/')
 
     else:
         # didn't pass CSRF; ignore logout attempt
         raise Unauthorized()
-    # IMPLEMENT THIS AND FIX BUG
-    # DO NOT CHANGE METHOD ON ROUTE
 
 
 ##############################################################################
@@ -167,8 +166,7 @@ def list_users():
 @app.get('/users/<int:user_id>')
 def show_user(user_id):
     """Show user profile."""
-    #print("Print of g>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",g)
-    #print("Pring of g.csrf_form>>>>>>>>>>>>>>>>>>",g.csrf_form)
+   
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
@@ -353,6 +351,7 @@ def homepage():
 #
 # https://stackoverflow.com/questions/34066804/disabling-caching-in-flask
 
+@app.after_request
 def add_header(response):
     """Add non-caching headers on every request."""
 
