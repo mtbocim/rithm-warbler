@@ -10,7 +10,7 @@
   <script src="https://unpkg.com/jquery"></script>
   <script src="https://unpkg.com/bootstrap"></script>
 
-  <link rel="stylesheet" 
+  <link rel="stylesheet"
         href="https://www.unpkg.com/bootstrap-icons/font/bootstrap-icons.css">
   <link rel="stylesheet" href="/static/stylesheets/style.css">
   <link rel="shortcut icon" href="/static/favicon.ico">
@@ -33,6 +33,7 @@
       {% block searchbox %}
         <li>
           <form class="navbar-form navbar-end" action="/users">
+
             <input
                 name="q"
                 class="form-control"
@@ -50,6 +51,7 @@
         <li><a href="/signup">Sign up</a></li>
         <li><a href="/login">Log in</a></li>
       {% else %}
+   
         <li>
           <a href="/users/{{ g.user.id }}">
             <img src="{{ g.user.image_url }}" alt="{{ g.user.username }}">

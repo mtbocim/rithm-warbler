@@ -4,11 +4,12 @@ from dotenv import load_dotenv
 from flask import Flask, render_template, request, flash, redirect, session, g
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
+from werkzeug.exceptions import Unauthorized
 
 from forms import (
-    UserAddForm, 
-    LoginForm, 
-    MessageForm, 
+    UserAddForm,
+    LoginForm,
+    MessageForm,
     CSRFAuthenticationForm
 )
 from models import db, connect_db, User, Message
@@ -36,10 +37,15 @@ connect_db(app)
 # User signup/login/logout
 
 
-@app.before_request
+# @app.before_request
+# def add_csrf_form_to_all_pages():
+    # """Before every route, add CSRF-only form to global object."""
+
+    # g.csrf_form = CSRFAuthenticationForm()
+
+@app.after_request
 def add_user_to_g():
     """If we're logged in, add curr user to Flask global."""
-
     if CURR_USER_KEY in session:
         g.user = User.query.get(session[CURR_USER_KEY])
 
@@ -122,14 +128,14 @@ def login():
 @app.post('/logout')
 def logout():
     """Handle logout of user and redirect to homepage."""
-    
-    #form = g.csrf_form
-    form = CSRFAuthenticationForm()
-    #breakpoint()
-    if form.validate_on_submit():
-        session.pop(CURR_USER_KEY, None)
 
-    return redirect('/')
+    if g.csrf_form.validate_on_submit():
+        session.pop(CURR_USER_KEY)
+        return redirect("/")
+
+    else:
+        # didn't pass CSRF; ignore logout attempt
+        raise Unauthorized()
     # IMPLEMENT THIS AND FIX BUG
     # DO NOT CHANGE METHOD ON ROUTE
 
@@ -143,7 +149,7 @@ def list_users():
 
     Can take a 'q' param in querystring to search by that username.
     """
-    
+
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
@@ -347,7 +353,6 @@ def homepage():
 #
 # https://stackoverflow.com/questions/34066804/disabling-caching-in-flask
 
-@app.after_request
 def add_header(response):
     """Add non-caching headers on every request."""
 
