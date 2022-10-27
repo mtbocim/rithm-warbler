@@ -84,8 +84,8 @@ class User(db.Model):
         secondaryjoin=(Follows.user_following_id == id),
         backref="following",
     )
-    
-    # Can walk to messages through likes table: 
+
+    # Can walk to messages through likes table:
     # liked_messages -> users_who_liked & back
     liked_messages = db.relationship(
         "Message",
@@ -155,9 +155,9 @@ class Message(db.Model):
     """
         An individual message ("warble").
     """
-    # Can walk to users through likes table: 
+    # Can walk to users through likes table:
     # liked_messages -> users_who_liked & back
-    
+
     __tablename__ = 'messages'
 
     id = db.Column(
@@ -187,19 +187,19 @@ class Like(db.Model):
         Warbles/likes
         Connection from user <---> messages (many to many)
     """
-    
-    __tablename__ = "likes"
 
+    __tablename__ = "likes"
+    __table_args__ = (db.UniqueConstraint("msg_id","user_id"),)
     msg_id = db.Column(
         db.Integer,
         db.ForeignKey('messages.id', ondelete="cascade"),
-        primary_key=True,
+        primary_key=True
     )
     # How does ondelete cascade works?
     user_id = db.Column(
         db.Integer,
         db.ForeignKey('users.id', ondelete="cascade"),
-        primary_key=True,
+        primary_key=True
     )
 
 def connect_db(app):

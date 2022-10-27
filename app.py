@@ -21,7 +21,7 @@ from forms import (
     CSRFAuthenticationForm,
     EditProfileForm
 )
-from models import db, connect_db, User, Message
+from models import db, connect_db, User, Message, Like
 
 load_dotenv()
 
@@ -358,9 +358,23 @@ def delete_message(message_id):
 
 @app.post('/messages/<int:message_id>/like')
 def like_message(message_id):
-    
+    """Like/unlike a message."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    msgs = Like.query.filter(Like.msg_id==message_id).one_or_none()
 
 
+    if not msgs:
+        message = Like(message_id,g.user.id)
+        db.session.add(message)
+        db.session.commit()
+        return redirect("/")
+    else:
+        Like.query.filter(Like.msg_id==message_id).delete
+        db.session.commit()
 ##############################################################################
 # Homepage and error pages
 
