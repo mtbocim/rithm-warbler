@@ -56,6 +56,18 @@
               <a href="/users/{{ msg.user.id }}">@{{ msg.user.username }}</a>
               <span class="text-muted">{{ msg.timestamp.strftime('%d %B %Y') }}</span>
               <p>{{ msg.text }}</p>
+              
+              <form action="/messages/{{msg.id}}/like" method="POST">
+            
+                <button type="Submit">
+                <!-- logic to show like/unlike -->
+                Like
+                </button>
+                <!-- Logic to determine filled star or not -->
+                <i class="bi bi-star"></i>
+              </form>
+              
+
             </div>
           </li>
         {% endfor %}

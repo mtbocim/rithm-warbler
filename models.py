@@ -84,6 +84,14 @@ class User(db.Model):
         secondaryjoin=(Follows.user_following_id == id),
         backref="following",
     )
+    
+    # Can walk to messages through likes table: 
+    # liked_messages -> users_who_liked & back
+    liked_messages = db.relationship(
+        "Message",
+        secondary = "likes",
+        backref = "users_who_like",
+    )
 
     def __repr__(self):
         return f"<User #{self.id}: {self.username}, {self.email}>"
@@ -144,8 +152,12 @@ class User(db.Model):
 
 
 class Message(db.Model):
-    """An individual message ("warble")."""
-
+    """
+        An individual message ("warble").
+    """
+    # Can walk to users through likes table: 
+    # liked_messages -> users_who_liked & back
+    
     __tablename__ = 'messages'
 
     id = db.Column(
@@ -171,8 +183,11 @@ class Message(db.Model):
     )
 
 class Like(db.Model):
-    """Warbles/likes"""
-
+    """
+        Warbles/likes
+        Connection from user <---> messages (many to many)
+    """
+    
     __tablename__ = "likes"
 
     msg_id = db.Column(
@@ -186,26 +201,6 @@ class Like(db.Model):
         db.ForeignKey('users.id', ondelete="cascade"),
         primary_key=True,
     )
-
-    users = db.relationship(
-        "Message",
-        secondary ="likes",
-        primaryjoin = (Messag.id),
-        secondaryjoin = (User.id = ),
-        backref="user"
-    )
-
-
-#   followers = db.relationship(
-#         "User",
-#         secondary="follows",
-#         primaryjoin=(Follows.user_being_followed_id == id),
-#         secondaryjoin=(Follows.user_following_id == id),
-#         backref="following",
-#     )
-
-
-
 
 def connect_db(app):
     """Connect this database to provided Flask app.

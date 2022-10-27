@@ -356,6 +356,10 @@ def delete_message(message_id):
 
     return redirect(f"/users/{g.user.id}")
 
+@app.post('/messages/<int:message_id>/like')
+def like_message(message_id):
+    
+
 
 ##############################################################################
 # Homepage and error pages
