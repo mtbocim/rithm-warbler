@@ -120,7 +120,7 @@ class User(db.Model):
         """
 
         user = cls.query.filter_by(username=username).first()
-        #breakpoint()
+        # breakpoint()
         if user:
             is_auth = bcrypt.check_password_hash(user.password, password)
             if is_auth:

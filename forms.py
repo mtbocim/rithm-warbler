@@ -24,6 +24,7 @@ class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[Length(min=6)])
 
+
 class EditProfileForm(FlaskForm):
     """Edit current user's profile form."""
 
@@ -33,6 +34,7 @@ class EditProfileForm(FlaskForm):
     image_url = StringField('(Optional) Image URL')
     header_image_url = StringField('(Optional) Image URL')
     bio = TextAreaField('User Bio')
+
 
 class CSRFAuthenticationForm(FlaskForm):
     """Form authentication only"""
