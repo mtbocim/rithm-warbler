@@ -258,7 +258,9 @@ def profile():
 
     if form.validate_on_submit():
         # breakpoint()
+        # make var holding authenticate result
         if g.user.authenticate(
+            # won't allow change username as is
             username=form.username.data,
             password=form.password.data
         ):
@@ -274,7 +276,7 @@ def profile():
             return redirect(f"/users/{g.user.id}")
         else:
             flash("Incorrect password!")
-            render_template("/users/edit.html", form=form)
+            #render_template("/users/edit.html", form=form)
 
     return render_template("/users/edit.html", form=form)
 
@@ -285,7 +287,7 @@ def delete_user():
 
     Redirect to signup page.
     """
-
+    #add authentication!
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")

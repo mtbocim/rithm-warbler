@@ -1,3 +1,5 @@
 Have users messages list in chronological order
 
 Make image size properly for user profile
+
+make cancel work
