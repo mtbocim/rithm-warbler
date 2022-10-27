@@ -189,7 +189,7 @@ class Like(db.Model):
     """
 
     __tablename__ = "likes"
-    __table_args__ = (db.UniqueConstraint("msg_id","user_id"),)
+    #__table_args__ = (db.UniqueConstraint("msg_id","user_id"),)
     msg_id = db.Column(
         db.Integer,
         db.ForeignKey('messages.id', ondelete="cascade"),

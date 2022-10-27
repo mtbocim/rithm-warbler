@@ -48,17 +48,17 @@
       <ul class="list-group" id="messages">
 
         {% for msg in messages %}
-        <form action="/messages/{{msg.id}}/like" method="POST">
+        <!-- <form action="/messages/{{msg.id}}/like" method="POST">
+          {{ g.csrf_form.hidden_tag() }}
           <button type="Submit">
-          <!-- logic to show like/unlike -->
           Like
           <i class="bi bi-star"></i>
           </button>
-          <!-- Logic to determine filled star or not -->
-        </form>
-
+         
+        </form> -->
+        {% include "/messages/like_message.html" %}
           <li class="list-group-item">
-            <a href="/messages/{{ msg.id }}" class="message-link"/>
+            <a href="/messages/{{ msg.id }}" class="message-link">
             <a href="/users/{{ msg.user.id }}">
               <img src="{{ msg.user.image_url }}" alt="" class="timeline-image">
             </a>

@@ -1,0 +1,7 @@
+<form action="/messages/{{msg.id}}/like" method="POST">
+    {{ g.csrf_form.hidden_tag() }}
+    <button type="Submit">
+        like
+    <i class="bi bi-star"></i>
+    </button>
+</form>

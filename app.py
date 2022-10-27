@@ -358,23 +358,24 @@ def delete_message(message_id):
 
 @app.post('/messages/<int:message_id>/like')
 def like_message(message_id):
-    """Like/unlike a message."""
+    """Like/unlike a message.""" 
 
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-    msgs = Like.query.filter(Like.msg_id==message_id).one_or_none()
-
-
-    if not msgs:
-        message = Like(message_id,g.user.id)
-        db.session.add(message)
+    message = Message.query.filter(Message.id == message_id).one_or_none()
+    
+    in_liked = Like.query.filter(Like.msg_id== message.id).one_or_none()
+    
+    if not in_liked:
+        g.user.liked_messages.append(message)
         db.session.commit()
         return redirect("/")
     else:
         Like.query.filter(Like.msg_id==message_id).delete
         db.session.commit()
+        return redirect("/")
 ##############################################################################
 # Homepage and error pages
 
