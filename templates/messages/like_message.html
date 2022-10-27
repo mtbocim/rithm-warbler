@@ -2,6 +2,6 @@
     {{ g.csrf_form.hidden_tag() }}
     <button type="Submit">
         like
-    <i class="bi bi-star"></i>
+    <i class="bi bi-star{% msg.user_who_like %}-fill{% endif %}"></i>
     </button>
 </form>

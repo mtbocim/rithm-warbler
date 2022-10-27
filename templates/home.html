@@ -48,15 +48,14 @@
       <ul class="list-group" id="messages">
 
         {% for msg in messages %}
-        <!-- <form action="/messages/{{msg.id}}/like" method="POST">
+        <form action="/messages/{{msg.id}}/like" method="POST">
           {{ g.csrf_form.hidden_tag() }}
           <button type="Submit">
-          Like
-          <i class="bi bi-star"></i>
+              like
+          <i class="bi bi-star{% if msg.user_who_like %}-fill{% endif %}"></i>
           </button>
-         
-        </form> -->
-        {% include "/messages/like_message.html" %}
+      </form>
+      
           <li class="list-group-item">
             <a href="/messages/{{ msg.id }}" class="message-link">
             <a href="/users/{{ msg.user.id }}">
