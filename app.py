@@ -259,12 +259,12 @@ def profile():
     if form.validate_on_submit():
         # breakpoint()
         # make var holding authenticate result
-        if g.user.authenticate(
+        authenticated = g.user.authenticate(
             # won't allow change username as is
-            username=form.username.data,
+            username=g.user.username,
             password=form.password.data
-        ):
-
+        )
+        if authenticated:
             g.user.username = form.username.data
             g.user.email = form.email.data
             g.user.image_url = form.image_url.data

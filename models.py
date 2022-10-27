@@ -170,6 +170,42 @@ class Message(db.Model):
         nullable=False,
     )
 
+class Like(db.Model):
+    """Warbles/likes"""
+
+    __tablename__ = "likes"
+
+    msg_id = db.Column(
+        db.Integer,
+        db.ForeignKey('messages.id', ondelete="cascade"),
+        primary_key=True,
+    )
+    # How does ondelete cascade works?
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('users.id', ondelete="cascade"),
+        primary_key=True,
+    )
+
+    users = db.relationship(
+        "Message",
+        secondary ="likes",
+        primaryjoin = (Messag.id),
+        secondaryjoin = (User.id = ),
+        backref="user"
+    )
+
+
+#   followers = db.relationship(
+#         "User",
+#         secondary="follows",
+#         primaryjoin=(Follows.user_being_followed_id == id),
+#         secondaryjoin=(Follows.user_following_id == id),
+#         backref="following",
+#     )
+
+
+
 
 def connect_db(app):
     """Connect this database to provided Flask app.
