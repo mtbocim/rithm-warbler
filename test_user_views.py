@@ -2,7 +2,7 @@
 
 # run these tests like:
 #
-FLASK_DEBUG=False 
+FLASK_DEBUG=False
 #      python -m unittest test_message_views.py
 
 
@@ -20,7 +20,7 @@ os.environ['DATABASE_URL'] = "postgresql:///warbler_test"
 
 # Now we can import app
 
-from app import app, CURR_USER_KEY
+from app import app, CURR_USER_KEY, do_logout
 
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 app.config['DEBUG_TB_HOSTS'] = ['dont-show-debug-toolbar']
@@ -62,3 +62,24 @@ class UserLoggedInViewCase(UserBaseViewTestCase):
             print(html)
             self.assertEqual(resp.status_code, 200)
             self.assertIn("<!--home.html rendered (comment for testing)-->",html)
+
+class UserNotLoggedInViewCase(UserBaseViewTestCase):
+    def test_logoutpage_view(self):
+
+        with self.client as c:
+            # with c.session_transaction() as sess:
+            #     sess[CURR_USER_KEY] = self.u1_id
+
+            # sess[CURR_USER_KEY] = None
+            resp = c.get("/")
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("<!--home-anon.html rendered (comment for testing)-->",html)
+
+class UserSignsUpViewCase(UserBaseViewTestCase):
+    def test_logoutpage_view(self):
+
+        with self.client as c:
+            # with c.session_transaction() as sess:
+            #     sess[CURR_USER_KEY] = self.u1_id
