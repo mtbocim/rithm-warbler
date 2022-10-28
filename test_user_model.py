@@ -31,14 +31,16 @@ db.drop_all()
 db.create_all()
 
 
-class UserModelTestCase(TestCase):
+class MessageModelTestCase(TestCase):
+    """Test for message views."""
     def setUp(self):
+        """Create test users and add seed data."""
         User.query.delete()
 
         u1 = User.signup("u1", "u1@email.com", "password", None)
         u2 = User.signup("u2", "u2@email.com", "password", None)
 
-        db.session.commit()
+        db.session.flush()
         self.u1_id = u1.id
         self.u2_id = u2.id
 
@@ -47,9 +49,9 @@ class UserModelTestCase(TestCase):
     def tearDown(self):
         db.session.rollback()
 
-    def test_user_model(self):
+    def test_message_model(self):
         u1 = User.query.get(self.u1_id)
 
         # User should have no messages & no followers
-        self.assertEqual(len(u1.messages), 0)
-        self.assertEqual(len(u1.followers), 0)
+        self.assertEqual()
+
