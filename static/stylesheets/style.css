@@ -551,9 +551,14 @@ p.card-bio {
   flex: 1;
 }
 
-#like-button {
+#like-button-form {
   position: absolute;
   left: 10px;
   z-index: 50;
   bottom: 11px;
+}
+
+.is-liked-button{
+  background: none;
+  border: none;
 }

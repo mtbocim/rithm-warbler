@@ -13,9 +13,9 @@
             <p>{{ msg.text }}</p>
             
             {% if msg.user_id != g.user.id %}
-            <form action="/messages/{{msg.id}}/like" method="POST" id="like-button">
+            <form action="/messages/{{msg.id}}/like" method="POST" id="like-button-form">
                 {{ g.csrf_form.hidden_tag() }}
-                <button type="Submit">
+                <button type="Submit" class="is-liked-button">
 
                     <i class="bi bi-star{% if msg.is_liked_by_user(g.user.id, msg.id) %}-fill{% endif %}"></i>
                 </button>

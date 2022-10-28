@@ -186,6 +186,7 @@ class Message(db.Model):
     def is_liked_by_user(cls, user_id, message_id):
         """
             Checks if the current user has liked the message.
+            Returns True or False
         """
 
         is_liked = Like.query.filter(
@@ -193,7 +194,10 @@ class Message(db.Model):
             Like.msg_id == message_id
         ).one_or_none()
 
-        return is_liked
+        if is_liked:
+            return True
+
+        return False
 
 
 

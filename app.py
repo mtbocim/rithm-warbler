@@ -247,7 +247,7 @@ def stop_following(follow_id):
 
 
 @app.route('/users/profile', methods=["GET", "POST"])
-def profile():
+def update_profile():
     """Update profile for current user if correct password is provided."""
 
     if not g.user:
@@ -287,7 +287,7 @@ def delete_user():
 
     Redirect to signup page.
     """
-    #add authentication!
+
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
@@ -298,6 +298,20 @@ def delete_user():
     db.session.commit()
 
     return redirect("/signup")
+
+
+@app.get('/users/<int:user_id>/liked-messages')
+def show_liked_messages(user_id):
+    """Shows messages a user has liked."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    user = User.query.get_or_404(user_id)
+    liked = g.user.liked_messages
+
+    return render_template('users/show_liked.html', user=user, messages=liked)
 
 
 ##############################################################################
@@ -356,35 +370,31 @@ def delete_message(message_id):
 
     return redirect(f"/users/{g.user.id}")
 
+
 @app.post('/messages/<int:message_id>/like')
-def like_message(message_id): # toggle message
+def toggle_like_message(message_id):
     """Like/unlike a message."""
 
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
-    #.get_or_404
-    message = Message.query.filter(Message.id == message_id).one_or_none()
-    # use class method to check message was liked
-    in_liked = Like.query.filter(Like.msg_id== message.id).one_or_none()
+
+    message = Message.query.get_or_404(message_id)
+
+    in_liked = Message.is_liked_by_user(g.user.id, message.id)
 
     if not in_liked:
         g.user.liked_messages.append(message)
         db.session.commit()
         return redirect("/")
     else:
-        # Might delete other people's likes 
-        Like.query.filter(Like.msg_id==message_id).delete()
+
+        Like.query.filter(
+            Like.msg_id == message_id,
+            Like.user_id == g.user.id,
+        ).delete()
         db.session.commit()
         return redirect("/")
-
-@app.get('/messages/liked-messages')
-def show_liked_messages():
-    """Shows messages a user has liked."""
-
-    liked = g.user.liked_messages
-
-    return render_template("home.html", messages=liked)
 
 
 ##############################################################################

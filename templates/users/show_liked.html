@@ -1,0 +1,10 @@
+{% extends 'users/detail.html' %}
+{% block user_details %}
+<div class="col-sm-6">
+  <ul class="list-group" id="messages">
+    
+    {% include "/messages/messages.html" %}
+
+  </ul>
+</div>
+{% endblock %}
