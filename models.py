@@ -182,6 +182,21 @@ class Message(db.Model):
         nullable=False,
     )
 
+    @classmethod
+    def is_liked_by_user(cls, user_id, message_id):
+        """
+            Checks if the current user has liked the message.
+        """
+
+        is_liked = Like.query.filter(
+            Like.user_id == user_id, 
+            Like.msg_id == message_id
+        ).one_or_none()
+
+        return is_liked
+
+
+
 class Like(db.Model):
     """
         Warbles/likes

@@ -373,12 +373,14 @@ def like_message(message_id):
         db.session.commit()
         return redirect("/")
     else:
-        Like.query.filter(Like.msg_id==message_id).delete
+        Like.query.filter(Like.msg_id==message_id).delete()
         db.session.commit()
         return redirect("/")
 
-@app.get('/messages/<int:user_id>/like')
-def show_liked_messages(user_id):
+@app.get('/messages/liked-messages')
+def show_liked_messages():
+    """Shows messages a user has liked."""
+    
     liked = g.user.liked_messages
 
     return render_template("home.html", messages=liked)
