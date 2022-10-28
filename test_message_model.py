@@ -25,18 +25,17 @@ class MessageBaseViewTestCase(TestCase):
     def setUp(self):
         """Create test client and add seed data"""
         User.query.delete()
+        Message.query.delete()
 
         u1 = User.signup("u1", "u1@email.com", "password", None)
-        print("userID>>>>>>>>>>>>>>>>>>>>",u1.id)
         db.session.add_all([u1])
         db.session.commit()
-        print("userID>>>>>>>>>>>>>>>>>>>>",u1.id)
+        
         self.u1_id = u1.id
+        
         m1 = Message(text="m1-text", user_id=self.u1_id)
-
         db.session.add_all([m1])
         db.session.commit()
-
 
         self.m1_id = m1.id
 
@@ -45,13 +44,32 @@ class MessageBaseViewTestCase(TestCase):
     def tearDown(self):
         db.session.rollback()
 
-    def test_message_model(self):
+    def test_delete_user_and_all_messages(self):
         # Delete user and its messages, and assert user.message length = 0
+        user = User.query.filter(User.id==self.u1_id).first()
+        self.assertEqual(len(user.messages), 1)
+
         User.query.filter(User.id==self.u1_id).delete()
         test = Message.query.filter(Message.user_id==self.u1_id).all()
         # User should have no messages
         self.assertEqual(len(test),0)
 
+    def test_add_message_for_user(self):
+
+        user = User.query.filter(User.id==self.u1_id).first()
+        self.assertEqual(len(user.messages), 1)
+
+        message = Message(text="a new message", user_id=self.u1_id)
+        db.session.add_all([message])
+        db.session.commit()
+
+        self.assertEqual(len(user.messages), 2)
+
+        message = Message.query.filter(Message.id==2).first()
+
+        self.assertEqual(message.text,"a new message")
+
+    
 
 
 
