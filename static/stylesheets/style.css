@@ -194,7 +194,9 @@ nav + .container {
 
 .message-area {
   margin-left: 10px;
+  margin-bottom: 20px;
 }
+
 
 #warbler-hero {
   height: 360px;
@@ -547,4 +549,11 @@ p.card-bio {
 
 .message-404 input {
   flex: 1;
+}
+
+#like-button {
+  position: absolute;
+  left: 10px;
+  z-index: 50;
+  bottom: 11px;
 }

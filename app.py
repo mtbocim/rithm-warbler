@@ -357,15 +357,15 @@ def delete_message(message_id):
     return redirect(f"/users/{g.user.id}")
 
 @app.post('/messages/<int:message_id>/like')
-def like_message(message_id):
+def like_message(message_id): # toggle message
     """Like/unlike a message."""
 
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
-
+    #.get_or_404
     message = Message.query.filter(Message.id == message_id).one_or_none()
-
+    # use class method to check message was liked
     in_liked = Like.query.filter(Like.msg_id== message.id).one_or_none()
 
     if not in_liked:
@@ -373,6 +373,7 @@ def like_message(message_id):
         db.session.commit()
         return redirect("/")
     else:
+        # Might delete other people's likes 
         Like.query.filter(Like.msg_id==message_id).delete()
         db.session.commit()
         return redirect("/")
@@ -380,7 +381,7 @@ def like_message(message_id):
 @app.get('/messages/liked-messages')
 def show_liked_messages():
     """Shows messages a user has liked."""
-    
+
     liked = g.user.liked_messages
 
     return render_template("home.html", messages=liked)

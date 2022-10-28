@@ -1,11 +1,5 @@
 {% for msg in messages %}
-<form action="/messages/{{msg.id}}/like" method="POST">
-    {{ g.csrf_form.hidden_tag() }}
-    <button type="Submit">
-        like
-        <i class="bi bi-star{% if msg.is_liked_by_user(g.user.id, msg.id) %}-fill{% endif %}"></i>
-    </button>
-</form>
+
 
 <li class="list-group-item">
     <a href="/messages/{{ msg.id }}" class="message-link">
@@ -17,9 +11,18 @@
             <a href="/users/{{ msg.user.id }}">@{{ msg.user.username }}</a>
             <span class="text-muted">{{ msg.timestamp.strftime('%d %B %Y') }}</span>
             <p>{{ msg.text }}</p>
+            
+            {% if msg.user_id != g.user.id %}
+            <form action="/messages/{{msg.id}}/like" method="POST" id="like-button">
+                {{ g.csrf_form.hidden_tag() }}
+                <button type="Submit">
 
-
+                    <i class="bi bi-star{% if msg.is_liked_by_user(g.user.id, msg.id) %}-fill{% endif %}"></i>
+                </button>
+            </form>
+            {% endif %}
         </div>
 
 </li>
 {% endfor %}
+
