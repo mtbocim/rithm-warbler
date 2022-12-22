@@ -4,6 +4,7 @@ Flask-Bcrypt
 Flask-DebugToolbar
 Flask-SQLAlchemy
 Flask-WTF
+Gunicorn
 ipython
 psycopg2-binary
 python-dotenv
