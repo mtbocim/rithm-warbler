@@ -76,10 +76,3 @@ class UserNotLoggedInViewCase(UserBaseViewTestCase):
 
             self.assertEqual(resp.status_code, 200)
             self.assertIn("<!--home-anon.html rendered (comment for testing)-->",html)
-
-class UserSignsUpViewCase(UserBaseViewTestCase):
-    def test_logoutpage_view(self):
-
-        with self.client as c:
-            # with c.session_transaction() as sess:
-            #     sess[CURR_USER_KEY] = self.u1_id

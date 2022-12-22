@@ -53,5 +53,5 @@ class MessageModelTestCase(TestCase):
         u1 = User.query.get(self.u1_id)
 
         # User should have no messages & no followers
-        self.assertEqual()
+        self.assertEqual(u1.following, [])
 
